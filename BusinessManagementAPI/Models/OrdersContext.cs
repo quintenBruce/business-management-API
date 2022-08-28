@@ -27,7 +27,7 @@ namespace BusinessManagementAPI.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=inventory_management;Integrated Security=True;");
+                optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=inventory_management;Integrated Security=True;").LogTo(Console.WriteLine);
             }
         }
 
@@ -45,9 +45,9 @@ namespace BusinessManagementAPI.Models
             {
                 entity.Property(e => e.FullName)
                     .IsUnicode(false)
-                    .HasColumnName("fullName");
+                    .HasColumnName("FullName");
 
-                entity.Property(e => e.PhoneNumber).HasColumnName("Phone_number");
+                entity.Property(e => e.PhoneNumber).HasColumnName("PhoneNumber");
             });
 
             modelBuilder.Entity<Order>(entity =>
@@ -57,20 +57,20 @@ namespace BusinessManagementAPI.Models
                 entity.Property(e => e.ComThread)
                     .HasMaxLength(15)
                     .IsUnicode(false)
-                    .HasColumnName("Com_thread")
+                    .HasColumnName("ComThread")
                     .IsFixedLength();
 
-                entity.Property(e => e.OrderCompletionDate).HasColumnName("Order_completion_date");
+                entity.Property(e => e.CompletionDate).HasColumnName("CompletionDate");
 
-                entity.Property(e => e.OrderDate).HasColumnName("Order_date");
+                entity.Property(e => e.PlacementDate).HasColumnName("PlacementDate");
 
-                entity.Property(e => e.OrderFulfillmentDate).HasColumnName("Order_fulfillment_date");
+                entity.Property(e => e.FulfillmentDate).HasColumnName("FulfillmentDate");
 
-                entity.Property(e => e.OrderStatus).HasColumnName("Order_status");
+                entity.Property(e => e.Status).HasColumnName("Status");
 
                 entity.Property(e => e.OutOfTown)
                     .IsRequired()
-                    .HasColumnName("Out_Of_Town")
+                    .HasColumnName("OutOfTown")
                     .HasDefaultValueSql("(CONVERT([bit],(0)))");
 
                 entity.HasOne(d => d.Customer)

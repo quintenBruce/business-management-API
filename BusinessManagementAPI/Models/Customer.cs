@@ -8,8 +8,12 @@ namespace BusinessManagementAPI.Models
     {
         public Customer()
         {
-            Orders = new HashSet<Order>();
+            Id = 0;
+            FullName = null;
+            Orders = null;
+            PhoneNumber = null;
         }
+
 
         public int Id { get; set; }
         public string FullName { get; set; } = null!;

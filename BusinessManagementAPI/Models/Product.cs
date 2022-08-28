@@ -13,9 +13,8 @@ namespace BusinessManagementAPI.Models
         public int OrderId { get; set; }
         public float Price { get; set; }
         public string? Dimensions { get; set; }
-
         public virtual Category? Category { get; set; }
-        [JsonIgnore]
+        
         public virtual Order Order { get; set; } = null!;
     }
 }

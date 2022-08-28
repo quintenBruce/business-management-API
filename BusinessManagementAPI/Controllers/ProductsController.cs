@@ -42,5 +42,13 @@ namespace BusinessManagementAPI.Controllers
             bool status = await _productRepository.DeleteProduct(id);
             return status ? Ok() : StatusCode(StatusCodes.Status500InternalServerError);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateProduct(Product product)
+        {
+            bool status = await _productRepository.CreateProduct(product);
+            return status ? Ok() : StatusCode(StatusCodes.Status500InternalServerError);
+        }
+
     }
 }

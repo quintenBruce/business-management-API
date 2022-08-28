@@ -15,19 +15,19 @@ namespace BusinessManagementAPI.Models
         public int Id { get; set; }
         public int CustomerId { get; set; }
         public float Total { get; set; }
-        public DateTime OrderDate { get; set; }
-        public DateTime OrderFulfillmentDate { get; set; }
+        public DateTime PlacementDate { get; set; }
+        public DateTime FulfillmentDate { get; set; }
+        public DateTime? CompletionDate { get; set; }
         public string ComThread { get; set; } = null!;
-        public bool OrderStatus { get; set; }
+        public bool Status { get; set; }
         public int DeliveryFee { get; set; }
         public bool? OutOfTown { get; set; }
         public float Balance { get; set; }
-        public DateTime? OrderCompletionDate { get; set; }
         
-        public virtual Customer Customer { get; set; } = null!;
-        [JsonIgnore]
+
+        
+        public virtual Customer Customer { get; set; }
         public virtual ICollection<Payment> Payments { get; set; }
-        [JsonIgnore]
         public virtual ICollection<Product> Products { get; set; }
     }
 }
