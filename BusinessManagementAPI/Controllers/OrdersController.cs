@@ -16,8 +16,6 @@ namespace BusinessManagementAPI.Controllers
             _orderRepository = orderRepository;
         }
 
-
-
         [HttpGet]
         public async Task<IActionResult> GetOrder(int id)
         {
@@ -39,38 +37,58 @@ namespace BusinessManagementAPI.Controllers
             return status ? Ok() : StatusCode(StatusCodes.Status500InternalServerError);
         }
 
-        [HttpPost]
+        [HttpDelete]
         public async Task<IActionResult> DeleteOrder(int id)
         {
             bool status = await _orderRepository.DeleteOrder(id);
             return status ? Ok() : StatusCode(StatusCodes.Status500InternalServerError);
         }
 
-        [HttpPost]
+        [HttpPost("{id}")]
         public async Task<IActionResult> CompleteOrder(int id)
         {
-            bool status = await _orderRepository.CompleteOrder(id);
-            return status ? Ok() : StatusCode(StatusCodes.Status500InternalServerError);
+            return await _orderRepository.CompleteOrder(id) ? Ok() : StatusCode(StatusCodes.Status500InternalServerError);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateOrder(OrderDTO orderDTO)
         {
-            bool status = await _orderRepository.CreateOrder(orderDTO);
-            return status ? Ok() : StatusCode(StatusCodes.Status500InternalServerError);
+            Order order = await _orderRepository.CreateOrder(orderDTO);
+            return order is not null ? Ok(order) : StatusCode(StatusCodes.Status500InternalServerError);
         }
+
         [HttpPost]
         public async Task<IActionResult> UpdateOrderGroup(OrderGroupDTO groupDTO)
         {
             bool status = await _orderRepository.UpdateOrderGroup(groupDTO);
             return status ? Ok() : StatusCode(StatusCodes.Status500InternalServerError);
         }
-        [HttpPost]
 
+        [HttpPost]
         public async Task<IActionResult> UpdateOrderGroup2(OrderDTO orderDTO) //accept an order domain model because updating requires ids and data
         {
             Order order = await _orderRepository.UpdateOrderGroup(orderDTO);
             return order is not null ? Ok(order) : StatusCode(StatusCodes.Status500InternalServerError);
+        }
+
+        [HttpPost]
+        public IActionResult Uer() //accept an order domain model because updating requires ids and data
+        {
+            _orderRepository.UpdateOrderGroup3();
+            return Ok();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> CheckOrderExists(int id)
+        {
+            return await _orderRepository.CheckOrderExists(id) ? Ok() : StatusCode(StatusCodes.Status500InternalServerError);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetOrdersForCalender()
+        {
+            IEnumerable<CalenderDTO> calenderDTOs = await _orderRepository.GetOrdersForCalender();
+            return calenderDTOs is not null ? Ok(calenderDTOs) : StatusCode(StatusCodes.Status500InternalServerError);
         }
     }
 }

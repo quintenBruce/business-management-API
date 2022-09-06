@@ -13,22 +13,27 @@ namespace BusinessManagementAPI.Repository
             _ordersContext = ordersContext;
         }
 
-        public async Task<bool> CreateOrder(OrderDTO orderDTO)
+        public async Task<Order> CreateOrder(OrderDTO orderDTO)
         {
-            var customer = OrderDTO.ToCustomer(orderDTO);
-            _ordersContext.Customers.Add(customer);
-
             var order = OrderDTO.ToOrder(orderDTO);
             _ordersContext.Orders.Add(order);
-            order.Customer = customer;
-            return await _ordersContext.SaveChangesAsync() == 2;
+            _ordersContext.Entry(order.Products.ElementAt(0).Category).State = EntityState.Detached;
+            if (await _ordersContext.SaveChangesAsync() > 0)
+                return order;
+            else
+                return new Order { };
+            
+            
         }
 
         public async Task<bool> DeleteOrder(int id)
         {
-            var order = _ordersContext.Orders.Find(id);
-            _ordersContext.Remove(order);
-            return await _ordersContext.SaveChangesAsync() == 1;
+            var order = _ordersContext.Orders.Include(x => x.Payments).Include(x=> x.Products).Include(x => x.Customer).Where(x => x.Id == id).ToList();
+            
+            _ordersContext.Remove(order.ElementAt(0));
+            _ordersContext.Remove(order.ElementAt(0).Customer);
+
+            return await _ordersContext.SaveChangesAsync() > 0;
         }
 
         public async Task<Order> GetOrder(int id)
@@ -38,7 +43,7 @@ namespace BusinessManagementAPI.Repository
 
         public async Task<IEnumerable<Order>> GetOrders()
         {
-            return await _ordersContext.Orders.Include(x => x.Customer).Include(x => x.Payments).Include(p => p.Products).ToListAsync();
+            return await _ordersContext.Orders.Include(x => x.Customer).Include(x => x.Payments).Include(p => p.Products).ThenInclude(p => p.Category).ToListAsync();
         }
 
         public async Task<bool> UpdateOrder(Order order)
@@ -67,7 +72,6 @@ namespace BusinessManagementAPI.Repository
             var order = OrderDTO.ToOrder(orderDTO);
             var tracking = _ordersContext.Orders.Update(order);
 
-
             if (await _ordersContext.SaveChangesAsync() > 0)
             {
                 return order;
@@ -76,6 +80,38 @@ namespace BusinessManagementAPI.Repository
             {
                 return new Order { };
             }
+        }
+
+        public void UpdateOrderGroup3()
+        {
+            List<Customer> customers = _ordersContext.Customers.Include(c => c.Orders).ToList();
+            customers = customers.Where(c => c.Orders.Count < 1).ToList();
+            customers.ForEach(x =>
+            {
+                _ordersContext.Remove(x);
+            });
+
+            var status = _ordersContext.SaveChanges();
+            var lkasdf = 9;
+        }
+
+        public async Task<bool> CheckOrderExists(int id)
+        {
+            return await _ordersContext.Orders.AnyAsync(order => order.Id == id);
+        }
+
+        public async Task<IEnumerable<CalenderDTO>> GetOrdersForCalender()
+        {
+            IEnumerable<CalenderDTO> calenderDTOs =  _ordersContext.Orders.Include(x => x.Products).Where(x => x.Status == false).Select(x => new CalenderDTO
+            {
+                Id = x.Id,
+                NumProducts = x.Products.Count,
+                FulfillmentDate = x.FulfillmentDate,
+            });
+
+            return calenderDTOs;
+
+
         }
     }
 }

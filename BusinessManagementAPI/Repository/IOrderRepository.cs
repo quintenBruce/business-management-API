@@ -10,9 +10,12 @@ namespace BusinessManagementAPI.Repository
         Task<Order> GetOrder(int id);
         Task<bool> DeleteOrder(int id);
         Task<bool> UpdateOrder(Order order);
-        Task<bool> CreateOrder(OrderDTO orderDTO);
+        Task<Order> CreateOrder(OrderDTO orderDTO);
         Task<bool> CompleteOrder(int id);
         Task<bool> UpdateOrderGroup(OrderGroupDTO orderGroupDTO);
         Task<Order> UpdateOrderGroup(OrderDTO orderDTO);
+        void UpdateOrderGroup3();
+        Task<bool> CheckOrderExists(int id);
+        Task<IEnumerable<CalenderDTO>> GetOrdersForCalender();
     }
 }

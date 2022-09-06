@@ -1,4 +1,5 @@
-﻿using BusinessManagementAPI.Models;
+﻿using BusinessManagementAPI.DTOs;
+using BusinessManagementAPI.Models;
 using BusinessManagementAPI.Repository;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,25 +23,30 @@ namespace BusinessManagementAPI.Controllers
             return payment is not null ? Ok(payment) : NotFound();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetPayments()
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPayments(int id)
         {
-            IEnumerable<Payment> payments = await _paymentRepository.GetPayments();
+            IEnumerable<Payment> payments = await _paymentRepository.GetPayments(id);
             return Utilities.IsAny(payments) ? Ok(payments) : NotFound();
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdatePayment(Payment payment)
+        public async Task<IActionResult> UpdatePayments(List<PaymentDTO> payments)
         {
-            bool status = await _paymentRepository.UpdatePayment(payment);
-            return status ? Ok() : StatusCode(StatusCodes.Status500InternalServerError);
+            var updatedPayments = await _paymentRepository.UpdatePayment(payments);
+            return updatedPayments is not null ? Ok(updatedPayments) : StatusCode(StatusCodes.Status500InternalServerError);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePayment(int id)
+        {
+            return await _paymentRepository.DeletePayment(id) ? Ok() : NotFound();
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeletePayment(int id)
+        public async Task<IActionResult> CreatePayments(List<CreatePaymentDTO> payments)
         {
-            bool status = await _paymentRepository.DeletePayment(id);
-            return status ? Ok() : StatusCode(StatusCodes.Status500InternalServerError);
+            return await _paymentRepository.CreatePayments(payments) ? Ok() : NotFound();
         }
     }
 }

@@ -12,5 +12,10 @@ namespace BusinessManagementAPI.DTOs
         {
             return new Payment { Id = p.Id, Amount = p.Amount, Type = p.Type};
         }
+
+        public static List<Payment> ToPaymentList(List<PaymentDTO> paymentDTOs)
+        {
+            return (List<Payment>)paymentDTOs.Select(x => PaymentDTO.ToPayment(x));
+        }
     }
 }

@@ -1,14 +1,15 @@
-﻿using BusinessManagementAPI.Models;
+﻿using BusinessManagementAPI.DTOs;
+using BusinessManagementAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BusinessManagementAPI.Repository
 {
     public interface IPaymentRepository
     {
-        Task<IEnumerable<Payment>> GetPayments();
+        Task<IEnumerable<Payment>> GetPayments(int id);
         Task<Payment> GetPayment(int id);
         Task<bool> DeletePayment(int id);
-        Task<bool> UpdatePayment(Payment payment);
-        Task<bool> CreatePayment(Payment payment);
+        Task<IEnumerable<PaymentDTO>> UpdatePayment(List<PaymentDTO> payments);
+        Task<bool> CreatePayments(List<CreatePaymentDTO> payments);
     }
 }
