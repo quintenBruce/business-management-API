@@ -30,10 +30,10 @@ namespace BusinessManagementAPI.Controllers
             return Utilities.IsAny(payments) ? Ok(payments) : NotFound();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> UpdatePayments(List<PaymentDTO> payments)
+        [HttpPost("{orderId}")]
+        public async Task<IActionResult> UpdatePayments(List<PaymentDTO> payments, int orderId)
         {
-            var updatedPayments = await _paymentRepository.UpdatePayment(payments);
+            var updatedPayments = await _paymentRepository.UpdatePayment(payments, orderId);
             return updatedPayments is not null ? Ok(updatedPayments) : StatusCode(StatusCodes.Status500InternalServerError);
         }
 

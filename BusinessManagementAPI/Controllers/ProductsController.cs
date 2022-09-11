@@ -1,4 +1,5 @@
-﻿using BusinessManagementAPI.Models;
+﻿using BusinessManagementAPI.DTOs;
+using BusinessManagementAPI.Models;
 using BusinessManagementAPI.Repository;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,25 +19,26 @@ namespace BusinessManagementAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetProduct(int id)
         {
-            Product product = await _productRepository.GetProduct(id);
+            IEnumerable<Product> product = await _productRepository.GetProducts(id);
             return product is not null ? Ok(product) : NotFound();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetProducts()
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetProducts(int id)
         {
-            IEnumerable<Product> products = await _productRepository.GetProducts();
+            IEnumerable<Product> products = await _productRepository.GetProducts(id);
             return Utilities.IsAny(products) ? Ok(products) : NotFound();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> UpdateProduct(Product order)
+        [HttpPost("{orderId}")]
+        public async Task<IActionResult> UpdateProducts(List<ProductDTO> productDTOs, int orderId)
         {
-            bool status = await _productRepository.UpdateProduct(order);
-            return status ? Ok() : StatusCode(StatusCodes.Status500InternalServerError);
+            IEnumerable<ProductDTO> updatedProducts = await _productRepository.UpdateProducts(productDTOs, orderId);
+            return updatedProducts is not null ? Ok(updatedProducts) : StatusCode(StatusCodes.Status500InternalServerError);
+
         }
 
-        [HttpPost]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
             bool status = await _productRepository.DeleteProduct(id);
@@ -44,10 +46,9 @@ namespace BusinessManagementAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProduct(Product product)
+        public async Task<IActionResult> CreateProducts(List<CreateProductDTO> products)
         {
-            bool status = await _productRepository.CreateProduct(product);
-            return status ? Ok() : StatusCode(StatusCodes.Status500InternalServerError);
+            return await _productRepository.CreateProducts(products) ? Ok() : NotFound();
         }
 
     }

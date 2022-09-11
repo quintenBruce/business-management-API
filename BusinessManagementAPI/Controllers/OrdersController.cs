@@ -57,12 +57,7 @@ namespace BusinessManagementAPI.Controllers
             return order is not null ? Ok(order) : StatusCode(StatusCodes.Status500InternalServerError);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> UpdateOrderGroup(OrderGroupDTO groupDTO)
-        {
-            bool status = await _orderRepository.UpdateOrderGroup(groupDTO);
-            return status ? Ok() : StatusCode(StatusCodes.Status500InternalServerError);
-        }
+        
 
         [HttpPost]
         public async Task<IActionResult> UpdateOrderGroup2(OrderDTO orderDTO) //accept an order domain model because updating requires ids and data
@@ -71,12 +66,7 @@ namespace BusinessManagementAPI.Controllers
             return order is not null ? Ok(order) : StatusCode(StatusCodes.Status500InternalServerError);
         }
 
-        [HttpPost]
-        public IActionResult Uer() //accept an order domain model because updating requires ids and data
-        {
-            _orderRepository.UpdateOrderGroup3();
-            return Ok();
-        }
+        
 
         [HttpGet("{id}")]
         public async Task<IActionResult> CheckOrderExists(int id)
@@ -89,6 +79,19 @@ namespace BusinessManagementAPI.Controllers
         {
             IEnumerable<CalenderDTO> calenderDTOs = await _orderRepository.GetOrdersForCalender();
             return calenderDTOs is not null ? Ok(calenderDTOs) : StatusCode(StatusCodes.Status500InternalServerError);
+        }
+        [HttpGet("{name}")]
+        public async Task<IActionResult> SearchOrdersByName(string name)
+        {
+            var orders = await _orderRepository.SearchOrdersByName(name);
+            return orders is not null ? Ok(orders) : NotFound();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SearchOrdersByStatus(bool status)
+        {
+            IEnumerable<Order> orders = await _orderRepository.GetOrders(status);
+            return orders is not null ? Ok(orders) : StatusCode(StatusCodes.Status500InternalServerError);
         }
     }
 }

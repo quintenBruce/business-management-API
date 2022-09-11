@@ -22,14 +22,12 @@ namespace BusinessManagementAPI.Repository
                 return order;
             else
                 return new Order { };
-            
-            
         }
 
         public async Task<bool> DeleteOrder(int id)
         {
-            var order = _ordersContext.Orders.Include(x => x.Payments).Include(x=> x.Products).Include(x => x.Customer).Where(x => x.Id == id).ToList();
-            
+            var order = _ordersContext.Orders.Include(x => x.Payments).Include(x => x.Products).Include(x => x.Customer).Where(x => x.Id == id).ToList();
+
             _ordersContext.Remove(order.ElementAt(0));
             _ordersContext.Remove(order.ElementAt(0).Customer);
 
@@ -44,6 +42,11 @@ namespace BusinessManagementAPI.Repository
         public async Task<IEnumerable<Order>> GetOrders()
         {
             return await _ordersContext.Orders.Include(x => x.Customer).Include(x => x.Payments).Include(p => p.Products).ThenInclude(p => p.Category).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Order>> GetOrders(bool status)
+        {
+            return await _ordersContext.Orders.Include(x => x.Customer).Include(x => x.Payments).Include(p => p.Products).ThenInclude(p => p.Category).Where(x => x.Status == status).ToListAsync();
         }
 
         public async Task<bool> UpdateOrder(Order order)
@@ -61,11 +64,7 @@ namespace BusinessManagementAPI.Repository
             return await _ordersContext.SaveChangesAsync() == 1;
         }
 
-        public async Task<bool> UpdateOrderGroup(OrderGroupDTO orderGroupDTO)
-        {
-            _ordersContext.Orders.Update(OrderGroupDTO.ToOrder(orderGroupDTO));
-            return await _ordersContext.SaveChangesAsync() > 0;
-        }
+        
 
         public async Task<Order> UpdateOrderGroup(OrderDTO orderDTO)
         {
@@ -74,6 +73,7 @@ namespace BusinessManagementAPI.Repository
 
             if (await _ordersContext.SaveChangesAsync() > 0)
             {
+                await UpdateOrderPriceAndBalance(order.Id);
                 return order;
             }
             else
@@ -82,18 +82,7 @@ namespace BusinessManagementAPI.Repository
             }
         }
 
-        public void UpdateOrderGroup3()
-        {
-            List<Customer> customers = _ordersContext.Customers.Include(c => c.Orders).ToList();
-            customers = customers.Where(c => c.Orders.Count < 1).ToList();
-            customers.ForEach(x =>
-            {
-                _ordersContext.Remove(x);
-            });
-
-            var status = _ordersContext.SaveChanges();
-            var lkasdf = 9;
-        }
+       
 
         public async Task<bool> CheckOrderExists(int id)
         {
@@ -102,7 +91,7 @@ namespace BusinessManagementAPI.Repository
 
         public async Task<IEnumerable<CalenderDTO>> GetOrdersForCalender()
         {
-            IEnumerable<CalenderDTO> calenderDTOs =  _ordersContext.Orders.Include(x => x.Products).Where(x => x.Status == false).Select(x => new CalenderDTO
+            IEnumerable<CalenderDTO> calenderDTOs = _ordersContext.Orders.Include(x => x.Products).Where(x => x.Status == false).Select(x => new CalenderDTO
             {
                 Id = x.Id,
                 NumProducts = x.Products.Count,
@@ -110,7 +99,27 @@ namespace BusinessManagementAPI.Repository
             });
 
             return calenderDTOs;
+        }
 
+        public async Task<IEnumerable<Order>> SearchOrdersByName(string name)
+        {
+            name = name.ToLower().Trim();
+            return await _ordersContext.Orders
+                .Include(x => x.Customer)
+                .Include(x => x.Products)
+                .Include(x => x.Payments)
+                .Where(x => x.Customer.FullName.ToLower().Replace(" ", "").Contains(name)).ToListAsync();
+        }
+
+        public async Task<bool> UpdateOrderPriceAndBalance(int id)
+        {
+            var order = _ordersContext.Orders.Include(x => x.Products).Include(x => x.Payments).Where(x => x.Id == id).ToList().First();
+            order.Total = order.Balance = 0;
+            order.Total += order.DeliveryFee;
+            order.Total += order.Products.Sum(x => x.Price);
+            order.Balance = order.Total;
+            order.Balance -= order.Payments.Sum(x => x.Amount);
+            return await _ordersContext.SaveChangesAsync() > 0;
 
         }
     }

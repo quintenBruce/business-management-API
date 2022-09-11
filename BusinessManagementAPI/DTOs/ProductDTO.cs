@@ -15,7 +15,14 @@ namespace BusinessManagementAPI.DTOs
 
         public static Product ToProducts(ProductDTO productDTO)
         {
-            return new Product { Id = productDTO.Id, Category = productDTO.Category, Dimensions = productDTO.Dimensions, Price = productDTO.Price, CategoryId = productDTO.CategoryId, Description = productDTO.Description, Name = productDTO.Name};
+            return new Product 
+            { Id = productDTO.Id, 
+                Category = productDTO.Category, 
+                Dimensions = productDTO.Dimensions, 
+                Price = productDTO.Price, 
+                CategoryId = productDTO.CategoryId, 
+                Description = productDTO.Description, 
+                Name = productDTO.Name};
         }
     }
 }
