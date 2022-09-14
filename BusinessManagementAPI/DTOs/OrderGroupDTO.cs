@@ -16,7 +16,6 @@ namespace BusinessManagementAPI.DTOs
         public float Balance { get; set; }
         public DateTime? OrderCompletionDate { get; set; }
 
-
         public virtual Customer Customer { get; set; }
         public virtual ICollection<PaymentDTO> Payments { get; set; }
         public virtual ICollection<ProductDTO> Products { get; set; }
@@ -39,10 +38,7 @@ namespace BusinessManagementAPI.DTOs
                 Customer = groupDTO.Customer,
                 Payments = groupDTO.Payments.Select(x => new Payment { Id = x.Id, Amount = x.Amount, Type = x.Type }).ToList(),
                 Products = groupDTO.Products.Select(x => new Product { Price = x.Price, Category = x.Category, Description = x.Description, Dimensions = x.Dimensions, Id = x.Id, Name = x.Name, CategoryId = x.CategoryId }).ToList()
-
             };
         }
     }
-
-    
 }

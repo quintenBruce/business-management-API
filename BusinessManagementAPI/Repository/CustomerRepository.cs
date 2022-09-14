@@ -5,13 +5,13 @@ namespace BusinessManagementAPI.Repository
 {
     public class CustomerRepository : ICustomerRepository
     {
-
         private readonly OrdersContext _ordersContext;
 
         public CustomerRepository(OrdersContext ordersContext)
         {
             _ordersContext = ordersContext;
         }
+
         public async Task<bool> CreateCustomer(Customer customer)
         {
             _ordersContext.Customers.Add(customer);

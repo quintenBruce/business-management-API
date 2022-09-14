@@ -12,6 +12,7 @@ namespace BusinessManagementAPI.DTOs
         public string? Dimensions { get; set; }
         public int OrderId { get; set; }
         public int CategoryId { get; set; }
+
         public static Product ToProduct(CreateProductDTO createProductDTO)
         {
             return new Product
@@ -25,7 +26,6 @@ namespace BusinessManagementAPI.DTOs
                 OrderId = createProductDTO.OrderId,
                 CategoryId = createProductDTO.Category.Id
             };
-
         }
     }
 }

@@ -7,6 +7,7 @@ namespace BusinessManagementAPI.DTOs
         public int Id { get; set; }
         public int NumProducts { get; set; }
         public DateTime FulfillmentDate { get; set; }
+
         public CalenderDTO ToCalenderDTO(Order order)
         {
             return new CalenderDTO
@@ -17,6 +18,4 @@ namespace BusinessManagementAPI.DTOs
             };
         }
     }
-
-    
 }

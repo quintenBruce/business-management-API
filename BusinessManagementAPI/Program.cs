@@ -1,7 +1,6 @@
-
-using Microsoft.EntityFrameworkCore;
 using BusinessManagementAPI.Models;
 using BusinessManagementAPI.Repository;
+using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,7 +23,6 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddDbContext<OrdersContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("dbconn")));
-
 
 var app = builder.Build();
 

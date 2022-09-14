@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
-
-namespace BusinessManagementAPI.Models
+﻿namespace BusinessManagementAPI.Models
 {
     public partial class Payment
     {
@@ -10,7 +6,6 @@ namespace BusinessManagementAPI.Models
         public float Amount { get; set; }
         public string Type { get; set; } = null!;
         public int OrderId { get; set; }
-        
 
         public virtual Order Order { get; set; } = null!;
     }

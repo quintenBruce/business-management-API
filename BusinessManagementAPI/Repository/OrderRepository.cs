@@ -64,8 +64,6 @@ namespace BusinessManagementAPI.Repository
             return await _ordersContext.SaveChangesAsync() == 1;
         }
 
-        
-
         public async Task<Order> UpdateOrderGroup(OrderDTO orderDTO)
         {
             var order = OrderDTO.ToOrder(orderDTO);
@@ -81,8 +79,6 @@ namespace BusinessManagementAPI.Repository
                 return new Order { };
             }
         }
-
-       
 
         public async Task<bool> CheckOrderExists(int id)
         {
@@ -120,7 +116,6 @@ namespace BusinessManagementAPI.Repository
             order.Balance = order.Total;
             order.Balance -= order.Payments.Sum(x => x.Amount);
             return await _ordersContext.SaveChangesAsync() > 0;
-
         }
     }
 }

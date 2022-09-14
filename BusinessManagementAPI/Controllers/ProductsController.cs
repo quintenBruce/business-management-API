@@ -1,10 +1,12 @@
 ﻿using BusinessManagementAPI.DTOs;
+using BusinessManagementAPI.Filters;
 using BusinessManagementAPI.Models;
 using BusinessManagementAPI.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BusinessManagementAPI.Controllers
 {
+    [ApiKeyAuth]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class ProductsController : Controller
@@ -35,7 +37,6 @@ namespace BusinessManagementAPI.Controllers
         {
             IEnumerable<ProductDTO> updatedProducts = await _productRepository.UpdateProducts(productDTOs, orderId);
             return updatedProducts is not null ? Ok(updatedProducts) : StatusCode(StatusCodes.Status500InternalServerError);
-
         }
 
         [HttpDelete("{id}")]
@@ -50,6 +51,5 @@ namespace BusinessManagementAPI.Controllers
         {
             return await _productRepository.CreateProducts(products) ? Ok() : NotFound();
         }
-
     }
 }

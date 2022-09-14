@@ -10,6 +10,7 @@ namespace BusinessManagementAPI.DTOs
 
         public string Type { get; set; }
         public int OrderId { get; set; }
+
         public static Payment ToPayment(CreatePaymentDTO createPaymentDTO)
         {
             return new Payment
@@ -19,9 +20,6 @@ namespace BusinessManagementAPI.DTOs
                 Type = createPaymentDTO.Type,
                 OrderId = createPaymentDTO.OrderId,
             };
-
         }
     }
 }
-
-    

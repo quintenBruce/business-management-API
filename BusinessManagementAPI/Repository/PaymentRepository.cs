@@ -36,12 +36,11 @@ namespace BusinessManagementAPI.Repository
             {
                 var order = _ordersContext.Orders.First(x => x.Id == payment.OrderId);
                 order.Balance += payment!.Amount;
-                
+
                 return true;
             }
             else
                 return false;
-            
         }
 
         public async Task<Payment> GetPayment(int id) => await _ordersContext.Payments.FindAsync(id);
@@ -75,7 +74,6 @@ namespace BusinessManagementAPI.Repository
             {
                 await _orderRepository.UpdateOrderPriceAndBalance(orderId);
                 return payments;
-
             }
             else
                 return new List<PaymentDTO> { };

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace BusinessManagementAPI.Models
 {
@@ -14,10 +12,10 @@ namespace BusinessManagementAPI.Models
             PhoneNumber = null;
         }
 
-
         public int Id { get; set; }
         public string FullName { get; set; } = null!;
         public int? PhoneNumber { get; set; }
+
         [JsonIgnore]
         public virtual ICollection<Order> Orders { get; set; }
     }

@@ -1,13 +1,15 @@
 ﻿using BusinessManagementAPI.DTOs;
+using BusinessManagementAPI.Filters;
 using BusinessManagementAPI.Models;
 using BusinessManagementAPI.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BusinessManagementAPI.Controllers
 {
+    [ApiKeyAuth]
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class PaymentsController : Controller
+    public class PaymentsController : ControllerBase
     {
         private IPaymentRepository _paymentRepository;
 

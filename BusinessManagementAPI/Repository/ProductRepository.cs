@@ -1,7 +1,6 @@
 ﻿using BusinessManagementAPI.DTOs;
 using BusinessManagementAPI.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 
 namespace BusinessManagementAPI.Repository
 {
@@ -25,15 +24,11 @@ namespace BusinessManagementAPI.Repository
                 product.CategoryId = _ordersContext.Categories.AsNoTracking().First(x => x.Name.Trim() == product.Category.Name.Trim()).Id;
                 product.Category = null;
 
-                
                 order.Balance += product.Price;
                 order.Total += product.Price;
-                
             }
 
             _ordersContext.Products.AddRange(productsList);
-
- 
 
             return await _ordersContext.SaveChangesAsync() > 0;
         }
@@ -47,8 +42,6 @@ namespace BusinessManagementAPI.Repository
             order.Total -= product.Price;
             return await _ordersContext.SaveChangesAsync() == 1;
         }
-
-        
 
         public async Task<IEnumerable<Product>> GetProducts(int id)
         {
@@ -69,22 +62,19 @@ namespace BusinessManagementAPI.Repository
                 .ToListAsync();
         }
 
-        
-
         public async Task<IEnumerable<ProductDTO>> UpdateProducts(List<ProductDTO> products, int orderId)
         {
             List<Product> productList = (List<Product>)products.Select(x => ProductDTO.ToProducts(x)).ToList();
-            
+
             productList.ForEach(q =>
             {
                 q.CategoryId = _ordersContext.Categories.AsNoTracking().First(x => x.Name.Trim() == q.Category.Name.Trim()).Id;
                 q.Category = null;
             });
-                _ordersContext.Products.UpdateRange(productList);
+            _ordersContext.Products.UpdateRange(productList);
             productList.ForEach(q =>
             {
                 _ordersContext.Entry(q).Property(x => x.OrderId).IsModified = false;
-                
             });
             int status = await _ordersContext.SaveChangesAsync();
             _ordersContext.ChangeTracker.Clear();
@@ -93,10 +83,7 @@ namespace BusinessManagementAPI.Repository
             {
                 await _orderRepository.UpdateOrderPriceAndBalance(orderId);
                 return products;
-
             }
-
-                
             else
                 return new List<ProductDTO> { };
         }

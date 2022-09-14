@@ -1,9 +1,11 @@
-﻿using BusinessManagementAPI.Models;
+﻿using BusinessManagementAPI.Filters;
+using BusinessManagementAPI.Models;
 using BusinessManagementAPI.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BusinessManagementAPI.Controllers
 {
+    [ApiKeyAuth]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class CustomersController : Controller

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
-
-namespace BusinessManagementAPI.Models
+﻿namespace BusinessManagementAPI.Models
 {
     public partial class Order
     {
@@ -23,9 +19,7 @@ namespace BusinessManagementAPI.Models
         public int DeliveryFee { get; set; }
         public bool? OutOfTown { get; set; }
         public float Balance { get; set; }
-        
 
-        
         public virtual Customer Customer { get; set; }
         public virtual ICollection<Payment> Payments { get; set; }
         public virtual ICollection<Product> Products { get; set; }

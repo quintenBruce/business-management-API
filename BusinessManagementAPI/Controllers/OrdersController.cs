@@ -1,13 +1,15 @@
 ﻿using BusinessManagementAPI.DTOs;
+using BusinessManagementAPI.Filters;
 using BusinessManagementAPI.Models;
 using BusinessManagementAPI.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BusinessManagementAPI.Controllers
 {
+    [ApiKeyAuth]
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class OrdersController : Controller
+    public class OrdersController : ControllerBase
     {
         private IOrderRepository _orderRepository;
 
@@ -57,16 +59,12 @@ namespace BusinessManagementAPI.Controllers
             return order is not null ? Ok(order) : StatusCode(StatusCodes.Status500InternalServerError);
         }
 
-        
-
         [HttpPost]
         public async Task<IActionResult> UpdateOrderGroup2(OrderDTO orderDTO) //accept an order domain model because updating requires ids and data
         {
             Order order = await _orderRepository.UpdateOrderGroup(orderDTO);
             return order is not null ? Ok(order) : StatusCode(StatusCodes.Status500InternalServerError);
         }
-
-        
 
         [HttpGet("{id}")]
         public async Task<IActionResult> CheckOrderExists(int id)
@@ -80,6 +78,7 @@ namespace BusinessManagementAPI.Controllers
             IEnumerable<CalenderDTO> calenderDTOs = await _orderRepository.GetOrdersForCalender();
             return calenderDTOs is not null ? Ok(calenderDTOs) : StatusCode(StatusCodes.Status500InternalServerError);
         }
+
         [HttpGet("{name}")]
         public async Task<IActionResult> SearchOrdersByName(string name)
         {

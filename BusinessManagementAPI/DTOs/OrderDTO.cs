@@ -18,7 +18,6 @@ namespace BusinessManagementAPI.DTOs
         public ICollection<ProductDTO>? Products { get; set; }
         public ICollection<PaymentDTO>? Payments { get; set; }
 
-
         public static Order ToOrder(OrderDTO orderDTO)
         {
             return new Order
@@ -37,7 +36,6 @@ namespace BusinessManagementAPI.DTOs
                 Customer = CustomerDTO.ToCustomer(orderDTO.Customer),
                 Products = orderDTO.Products is not null ? orderDTO.Products.Select(x => ProductDTO.ToProducts(x)).ToList() : new List<Product> { },
                 Payments = orderDTO.Payments is not null ? orderDTO.Payments.Select(x => PaymentDTO.ToPayment(x)).ToList() : new List<Payment> { },
-
             };
         }
 
@@ -45,6 +43,5 @@ namespace BusinessManagementAPI.DTOs
         {
             return CustomerDTO.ToCustomer(orderDTO.Customer);
         }
-
     }
 }

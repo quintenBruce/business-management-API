@@ -11,6 +11,7 @@ namespace BusinessManagementAPI.Repository
         {
             _ordersContext = ordersContext;
         }
+
         public async Task<bool> CreateCategory(Category category)
         {
             _ordersContext.Categories.Add(new Category
@@ -34,8 +35,8 @@ namespace BusinessManagementAPI.Repository
 
         public async Task<IEnumerable<Category>> GetCategories()
         {
-            return await _ordersContext.Categories.Select(x => new Category 
-            { 
+            return await _ordersContext.Categories.Select(x => new Category
+            {
                 Id = x.Id,
                 Name = x.Name.Trim(),
             }).ToListAsync();

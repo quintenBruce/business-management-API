@@ -1,9 +1,11 @@
-﻿using BusinessManagementAPI.Models;
+﻿using BusinessManagementAPI.Filters;
+using BusinessManagementAPI.Models;
 using BusinessManagementAPI.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BusinessManagementAPI.Controllers
 {
+    [ApiKeyAuth]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class CategoriesController : Controller
@@ -11,7 +13,7 @@ namespace BusinessManagementAPI.Controllers
         private ICategoryRepository _categoryRepository;
 
         public CategoriesController(ICategoryRepository categoryRepository)
-        {
+        { 
             _categoryRepository = categoryRepository;
         }
 

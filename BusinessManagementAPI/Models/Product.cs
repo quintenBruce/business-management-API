@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
-
-namespace BusinessManagementAPI.Models
+﻿namespace BusinessManagementAPI.Models
 {
     public partial class Product
     {
@@ -14,7 +10,7 @@ namespace BusinessManagementAPI.Models
         public float Price { get; set; }
         public string? Dimensions { get; set; }
         public virtual Category? Category { get; set; }
-        
+
         public virtual Order Order { get; set; } = null!;
     }
 }
