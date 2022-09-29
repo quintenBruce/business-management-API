@@ -17,6 +17,7 @@ namespace BusinessManagementAPI.Filters
             var configuration = context.HttpContext.RequestServices.GetRequiredService<IConfiguration>();
 
             var apiKey = configuration.GetValue<string>("ApiKey");
+            
 
             if (!apiKey.Equals(potentialApiKey))
             {

@@ -17,7 +17,11 @@ namespace BusinessManagementAPI.Repository
         {
             var order = OrderDTO.ToOrder(orderDTO);
             _ordersContext.Orders.Add(order);
-            _ordersContext.Entry(order.Products.ElementAt(0).Category).State = EntityState.Detached;
+            for (int i = 0; i < order.Products.Count; i++)
+            {
+                _ordersContext.Entry(order.Products.ElementAt(i).Category).State = EntityState.Detached;
+            }
+            
             if (await _ordersContext.SaveChangesAsync() > 0)
                 return order;
             else
@@ -85,7 +89,7 @@ namespace BusinessManagementAPI.Repository
             return await _ordersContext.Orders.AnyAsync(order => order.Id == id);
         }
 
-        public async Task<IEnumerable<CalenderDTO>> GetOrdersForCalender()
+        public IEnumerable<CalenderDTO> GetOrdersForCalender()
         {
             IEnumerable<CalenderDTO> calenderDTOs = _ordersContext.Orders.Include(x => x.Products).Where(x => x.Status == false).Select(x => new CalenderDTO
             {

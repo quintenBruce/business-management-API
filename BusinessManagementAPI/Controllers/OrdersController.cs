@@ -3,6 +3,7 @@ using BusinessManagementAPI.Filters;
 using BusinessManagementAPI.Models;
 using BusinessManagementAPI.Repository;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace BusinessManagementAPI.Controllers
 {
@@ -22,13 +23,15 @@ namespace BusinessManagementAPI.Controllers
         public async Task<IActionResult> GetOrder(int id)
         {
             Order order = await _orderRepository.GetOrder(id);
-            return order is not null ? Ok(order) : NotFound();
+
+            return order is not null ? Ok(order) : StatusCode(StatusCodes.Status500InternalServerError);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetOrders()
         {
             IEnumerable<Order> orders = await _orderRepository.GetOrders();
+           
             return Utilities.IsAny(orders) ? Ok(orders) : NotFound();
         }
 
@@ -55,7 +58,7 @@ namespace BusinessManagementAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateOrder(OrderDTO orderDTO)
         {
-            Order order = await _orderRepository.CreateOrder(orderDTO);
+                Order order = await _orderRepository.CreateOrder(orderDTO);
             return order is not null ? Ok(order) : StatusCode(StatusCodes.Status500InternalServerError);
         }
 
@@ -73,9 +76,9 @@ namespace BusinessManagementAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetOrdersForCalender()
+        public IActionResult GetOrdersForCalender()
         {
-            IEnumerable<CalenderDTO> calenderDTOs = await _orderRepository.GetOrdersForCalender();
+            IEnumerable<CalenderDTO> calenderDTOs = _orderRepository.GetOrdersForCalender();
             return calenderDTOs is not null ? Ok(calenderDTOs) : StatusCode(StatusCodes.Status500InternalServerError);
         }
 

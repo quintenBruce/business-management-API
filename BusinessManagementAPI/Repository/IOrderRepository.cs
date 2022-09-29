@@ -23,7 +23,7 @@ namespace BusinessManagementAPI.Repository
 
         Task<bool> CheckOrderExists(int id);
 
-        Task<IEnumerable<CalenderDTO>> GetOrdersForCalender();
+        IEnumerable<CalenderDTO> GetOrdersForCalender();
 
         Task<IEnumerable<Order>> SearchOrdersByName(string name);
 
