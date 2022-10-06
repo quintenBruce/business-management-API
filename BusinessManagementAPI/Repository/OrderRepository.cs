@@ -16,16 +16,22 @@ namespace BusinessManagementAPI.Repository
         public async Task<Order> CreateOrder(OrderDTO orderDTO)
         {
             var order = OrderDTO.ToOrder(orderDTO);
-            _ordersContext.Orders.Add(order);
-            for (int i = 0; i < order.Products.Count; i++)
+            foreach (var product in order.Products)
             {
-                _ordersContext.Entry(order.Products.ElementAt(i).Category).State = EntityState.Detached;
+                product.CategoryId = product.Category!.Id;
+                product.Category = null;
             }
+            _ordersContext.Orders.Add(order);
+
+
+            foreach (var product in order.Products!)
+                product.Category = await _ordersContext.Categories.FirstAsync(x => x.Id == product.CategoryId);
             
+
             if (await _ordersContext.SaveChangesAsync() > 0)
                 return order;
             else
-                return new Order { };
+                return null!;
         }
 
         public async Task<bool> DeleteOrder(int id)
