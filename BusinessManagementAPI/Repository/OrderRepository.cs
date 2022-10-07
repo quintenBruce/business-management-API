@@ -125,6 +125,9 @@ namespace BusinessManagementAPI.Repository
             order.Total += order.Products.Sum(x => x.Price);
             order.Balance = order.Total;
             order.Balance -= order.Payments.Sum(x => x.Amount);
+            order.Balance = (float)Math.Round(order.Balance, 2);
+            order.Total = (float)Math.Round(order.Total, 2);
+
             return await _ordersContext.SaveChangesAsync() > 0;
         }
     }
