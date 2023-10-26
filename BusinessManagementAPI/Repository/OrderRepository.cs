@@ -53,6 +53,15 @@ namespace BusinessManagementAPI.Repository
         {
             return await _ordersContext.Orders.Include(x => x.Customer).Include(x => x.Payments).Include(p => p.Products).ThenInclude(p => p.Category).ToListAsync();
         }
+        
+        public async Task<IEnumerable<Order>> GetActiveOrders()
+        {
+            return await _ordersContext.Orders.Where(x => x.Status == false).Include(x => x.Customer).Include(x => x.Payments).Include(p => p.Products).ThenInclude(p => p.Category).ToListAsync();
+        }
+        public async Task<IEnumerable<Order>> GetInactiveOrders()
+        {
+            return await _ordersContext.Orders.Where(x => x.Status == true).Include(x => x.Customer).Include(x => x.Payments).Include(p => p.Products).ThenInclude(p => p.Category).ToListAsync();
+        }
 
         public async Task<IEnumerable<Order>> GetOrders(bool status)
         {

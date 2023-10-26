@@ -22,6 +22,8 @@ namespace BusinessManagementAPI.Repository
         Task<Order> UpdateOrderGroup(OrderDTO orderDTO);
 
         Task<bool> CheckOrderExists(int id);
+        Task<IEnumerable<Order>> GetActiveOrders();
+        Task<IEnumerable<Order>> GetInactiveOrders();
 
         IEnumerable<CalenderDTO> GetOrdersForCalender();
 

@@ -35,6 +35,22 @@ namespace BusinessManagementAPI.Controllers
             return Utilities.IsAny(orders) ? Ok(orders) : NotFound();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetActiveOrders()
+        {
+            IEnumerable<Order> orders = await _orderRepository.GetActiveOrders();
+
+            return Utilities.IsAny(orders) ? Ok(orders) : NotFound();
+        }
+      
+        [HttpGet]
+        public async Task<IActionResult> GetInactiveOrders()
+        {
+            IEnumerable<Order> orders = await _orderRepository.GetInactiveOrders();
+
+            return Utilities.IsAny(orders) ? Ok(orders) : NotFound();
+        }
+
         [HttpPost]
         public async Task<IActionResult> UpdateOrder(Order order)
         {
